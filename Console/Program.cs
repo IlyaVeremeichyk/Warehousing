@@ -1,4 +1,5 @@
 ﻿using System;
+using MathLib.Models;
 
 namespace Console1
 {
@@ -6,6 +7,7 @@ namespace Console1
     {
         static void Main(string[] args)
         {
+            var b = new Box();
             Console.WriteLine("Hello World!");
         }
     }

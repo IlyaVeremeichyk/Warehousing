@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Сonsole
+namespace Console1
 {
     class Program
     {

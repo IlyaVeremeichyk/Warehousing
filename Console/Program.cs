@@ -1,5 +1,5 @@
 ﻿using System;
-using MathLib.Models;
+using MathLib.Logic.Models;
 
 namespace Console1
 {

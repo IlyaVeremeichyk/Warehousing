@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>MathLib.Logic</AssemblyName>
+    <RootNamespace>MathLib.Logic</RootNamespace>
   </PropertyGroup>
 
 </Project>

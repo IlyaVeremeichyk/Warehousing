@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\MathLib\app.csproj" />
+    <ProjectReference Include="..\MathLib.Logic\MathLib.Logic.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

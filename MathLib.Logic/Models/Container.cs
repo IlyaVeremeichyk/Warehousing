@@ -19,10 +19,10 @@ namespace MathLib.Logic.Models
 
         // The collection of boxes to be placed in this container
         // Box - a box object, int - boxes quantity
-        public List<BoxQunatityPair> PlacedBoxes { get; internal set; }
+        public List<BoxQunatityPair> LoadingProgram { get; internal set; }
 
         // Each internal list is one row of placing
-        public List<List<Box>> PlacingPlan { get; internal set; } 
+        public List<List<Box>> PlacingPlan { get; internal set; }
 
         #endregion
 
@@ -35,7 +35,8 @@ namespace MathLib.Logic.Models
             Length = length;
             Width = width;
             Height = height;
-            PlacedBoxes = new List<BoxQunatityPair>();
+            LoadingProgram = new List<BoxQunatityPair>();
+            PlacingPlan = new List<List<Box>>();
         }
 
         #endregion

@@ -63,7 +63,7 @@ namespace MathLib.Logic
                 foreach (Box box in boxes)
                 {
                     // counting optimal solutions matrix for each box for the current container
-                    ReverseSweep(box, container); 
+                    ReverseSweep(box, container);
                 }
 
                 // counting optimal boxes combination for the current container
@@ -136,31 +136,31 @@ namespace MathLib.Logic
 
         private void CheckConstraintsForSize(Container container)
         {
-            var placedBoxQuantity = container.PlacedBoxes.Count - 1;
+            var placedBoxQuantity = container.LoadingProgram.Count - 1;
 
-            for (int i= placedBoxQuantity; i >= 0; i--)
+            for (int i = placedBoxQuantity; i >= 0; i--)
             {
-                var box = container.PlacedBoxes[i].Box;
+                var box = container.LoadingProgram[i].Box;
 
                 // Constraint: a box can be placed only on its base
                 if (box.Length > container.Length || box.Length > container.Width ||
-                    box.Width > container.Length  || box.Width > container.Width  ||
+                    box.Width > container.Length || box.Width > container.Width ||
                     box.Height > container.Height)
                 {
-                    container.PlacedBoxes.RemoveAt(i);
+                    container.LoadingProgram.RemoveAt(i);
                 }
             }
         }
 
         private void CheckConstraintsForVolume(Container container)
         {
-            for (int i = 0; i < container.PlacedBoxes.Count; i++)
+            for (int i = 0; i < container.LoadingProgram.Count; i++)
             {
-                while (CountTotalBoxesVolume(container.PlacedBoxes) > container.Volume)
+                while (CountTotalBoxesVolume(container.LoadingProgram) > container.Volume)
                 {
-                    if (container.PlacedBoxes[i].Quantity != 0)
+                    if (container.LoadingProgram[i].Quantity != 0)
                     {
-                        container.PlacedBoxes[i].Quantity--;
+                        container.LoadingProgram[i].Quantity--;
                     }
                     else
                     {
@@ -178,36 +178,36 @@ namespace MathLib.Logic
 
         private void DowngradeToOrderSizeLevel(Container container)
         {
-            for (int i = 0; i < container.PlacedBoxes.Count; i++)
+            for (int i = 0; i < container.LoadingProgram.Count; i++)
             {
-                var orderQuantity = container.PlacedBoxes[i].Box.OrderQuantity;
+                var orderQuantity = container.LoadingProgram[i].Box.OrderQuantity;
 
-                if (container.PlacedBoxes[i].Quantity > orderQuantity)
+                if (container.LoadingProgram[i].Quantity > orderQuantity)
                 {
-                    container.PlacedBoxes[i].Quantity = orderQuantity;
+                    container.LoadingProgram[i].Quantity = orderQuantity;
                 }
             }
         }
 
         private void RaiseToOrderLevel(Container container)
         {
-            for (int i = 0; i < container.PlacedBoxes.Count; i++)
+            for (int i = 0; i < container.LoadingProgram.Count; i++)
             {
-                var box = container.PlacedBoxes[i].Box;
-                var quantity = container.PlacedBoxes[i].Quantity;
+                var box = container.LoadingProgram[i].Box;
+                var quantity = container.LoadingProgram[i].Quantity;
                 var isMaxPossibleQuantity = false;
 
                 if (quantity < box.OrderQuantity)
                 {
                     while (!isMaxPossibleQuantity)
                     {
-                        container.PlacedBoxes[i].Quantity++;
+                        container.LoadingProgram[i].Quantity++;
 
-                        if (!DoesMeetTheVolumeLimit(container) || 
+                        if (!DoesMeetTheVolumeLimit(container) ||
                             !DoesMeetTheWeightLimit(container) ||
                             quantity > box.OrderQuantity)
                         {
-                            container.PlacedBoxes[i].Quantity--;
+                            container.LoadingProgram[i].Quantity--;
                             isMaxPossibleQuantity = true;
                         }
                     }
@@ -217,12 +217,12 @@ namespace MathLib.Logic
 
         private bool DoesMeetTheWeightLimit(Container container)
         {
-            return CountTotalBoxesWeight(container.PlacedBoxes) < container.Capacity;
+            return CountTotalBoxesWeight(container.LoadingProgram) < container.Capacity;
         }
 
         private bool DoesMeetTheVolumeLimit(Container container)
         {
-            return CountTotalBoxesVolume(container.PlacedBoxes) < container.Volume;
+            return CountTotalBoxesVolume(container.LoadingProgram) < container.Volume;
         }
 
         private double CountTotalBoxesVolume(List<BoxQunatityPair> boxesSet)
@@ -328,7 +328,7 @@ namespace MathLib.Logic
                 currentBoxOptimalsMatrix = currentBoxOptimalsMatrix.Next;
             }
 
-            container.PlacedBoxes = optimalBoxCombination;
+            container.LoadingProgram = optimalBoxCombination;
             _filledContainers.Add(container);
         }
 
@@ -343,10 +343,10 @@ namespace MathLib.Logic
 
         private void DecreaseBoxesOrderQuantityAfterContainerFilled(List<Box> boxes, Container container)
         {
-            for (int i = 0; i < container.PlacedBoxes.Count; i++)
+            for (int i = 0; i < container.LoadingProgram.Count; i++)
             {
-                var box = container.PlacedBoxes[i].Box;
-                var quantity = container.PlacedBoxes[i].Quantity;
+                var box = container.LoadingProgram[i].Box;
+                var quantity = container.LoadingProgram[i].Quantity;
 
                 var boxToChange = boxes.SingleOrDefault(b => b.Equals(box));
 

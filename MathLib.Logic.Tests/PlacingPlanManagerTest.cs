@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathLib.Logic;
 using MathLib.Logic.Models;
 using Xunit;
 
-namespace MathLib.Logic.Tests
+namespace WMS.MathLib.Logic.Tests
 {
     public class PlacingPlanManagerTest
     {
@@ -64,10 +65,10 @@ namespace MathLib.Logic.Tests
         {
             get
             {
-                yield return new object[] { new List<BoxQunatityPair> { new BoxQunatityPair {Box = new Box {Length = 0}} }, new List<Container> { new Container {Length = 10, Width = 10, Height = 10}} };
+                yield return new object[] { new List<BoxQunatityPair> { new BoxQunatityPair { Box = new Box { Length = 0 } } }, new List<Container> { new Container { Length = 10, Width = 10, Height = 10 } } };
                 yield return new object[] { new List<BoxQunatityPair> { new BoxQunatityPair { Box = new Box { Length = -1 } } }, new List<Container> { new Container { Length = 10, Width = 10, Height = 10 } } };
-                yield return new object[] { new List<BoxQunatityPair> { new BoxQunatityPair { Box = new Box { Length = 10, Width = 10, Height = 10}, Quantity = -5} }, new List<Container> { new Container { Length = 10, Width = 10, Height = 10 } } };
-                yield return new object[] { new List<BoxQunatityPair> { new BoxQunatityPair { Box = new Box { Length = 10, Width = 10, Height = 10 }, Quantity = 10 } }, new List<Container> { new Container { Length =0 } } };
+                yield return new object[] { new List<BoxQunatityPair> { new BoxQunatityPair { Box = new Box { Length = 10, Width = 10, Height = 10 }, Quantity = -5 } }, new List<Container> { new Container { Length = 10, Width = 10, Height = 10 } } };
+                yield return new object[] { new List<BoxQunatityPair> { new BoxQunatityPair { Box = new Box { Length = 10, Width = 10, Height = 10 }, Quantity = 10 } }, new List<Container> { new Container { Length = 0 } } };
                 yield return new object[] { new List<BoxQunatityPair> { new BoxQunatityPair { Box = new Box { Length = 10, Width = 10, Height = 10 }, Quantity = 10 } }, new List<Container> { new Container { Length = -1 } } };
             }
         }
@@ -83,12 +84,12 @@ namespace MathLib.Logic.Tests
         {
             // Act
 
-            _PackagingLogicManager.GetPlacingPlan(boxesSet, containersSet);
+            var packagingPlan = _PackagingLogicManager.GetPlacingPlan(boxesSet, containersSet);
             var executionPercent = _PackagingLogicManager.CountExecutionPercent();
 
             //Assert
 
-            Assert.NotEmpty(containersSet.First().PlacingPlan);
+            Assert.NotEmpty(packagingPlan.First().PlacingPlan);
             Assert.InRange(executionPercent, 90, 100); // is more than 90%
         }
     }

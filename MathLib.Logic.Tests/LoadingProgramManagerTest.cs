@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathLib.Logic;
 using MathLib.Logic.Models;
 using Xunit;
 
-namespace MathLib.Logic.Tests
+namespace WMS.MathLib.Logic.Tests
 {
     public class LoadingProgramManagerTest
     {
@@ -67,9 +68,9 @@ namespace MathLib.Logic.Tests
         {
             get
             {
-                yield return new object[] { new List<Box> { new Box { Length = 0 } }, new List<Container> { new Container {Capacity = 5D}} };
+                yield return new object[] { new List<Box> { new Box { Length = 0 } }, new List<Container> { new Container { Capacity = 5D } } };
                 yield return new object[] { new List<Box> { new Box { Length = -1 } }, new List<Container> { new Container { Capacity = 5D } } };
-                yield return new object[] { new List<Box> { new Box { Cost = 10, OrderQuantity = 1, Weight = 10} }, new List<Container> { new Container { Capacity = 0D } } };
+                yield return new object[] { new List<Box> { new Box { Cost = 10, OrderQuantity = 1, Weight = 10 } }, new List<Container> { new Container { Capacity = 0D } } };
                 yield return new object[] { new List<Box> { new Box { Cost = 10, OrderQuantity = 1, Weight = 10 } }, new List<Container> { new Container { Capacity = -1D } } };
             }
         }
@@ -100,9 +101,9 @@ namespace MathLib.Logic.Tests
 
             for (int i = 0; i < containersToCheck; i++)
             {
-                var actualBoxAResult = actualResult[i].PlacedBoxes.Single(b => b.Box.Equals(boxA)).Quantity;
-                var actualBoxBResult = actualResult[i].PlacedBoxes.Single(b => b.Box.Equals(boxB)).Quantity;
-                var actualBoxCResult = actualResult[i].PlacedBoxes.Single(b => b.Box.Equals(boxC)).Quantity;
+                var actualBoxAResult = actualResult[i].LoadingProgram.Single(b => b.Box.Equals(boxA)).Quantity;
+                var actualBoxBResult = actualResult[i].LoadingProgram.Single(b => b.Box.Equals(boxB)).Quantity;
+                var actualBoxCResult = actualResult[i].LoadingProgram.Single(b => b.Box.Equals(boxC)).Quantity;
 
                 Assert.Equal(2, actualBoxAResult);
                 Assert.Equal(0, actualBoxBResult);
@@ -121,7 +122,7 @@ namespace MathLib.Logic.Tests
 
             //Act
 
-            var actualResult = _DPLogicManager.GetLoadProgram(boxesSet, containresSet).First().PlacedBoxes.Count;
+            var actualResult = _DPLogicManager.GetLoadProgram(boxesSet, containresSet).First().LoadingProgram.Count;
 
             //Assert
 
@@ -150,7 +151,7 @@ namespace MathLib.Logic.Tests
 
             var loadingPlan = _DPLogicManager.GetLoadProgram(boxesSet, containresSet);
 
-            foreach (var placedBox in loadingPlan.First().PlacedBoxes)
+            foreach (var placedBox in loadingPlan.First().LoadingProgram)
             {
                 actualResult += placedBox.Quantity;
             }
@@ -178,9 +179,9 @@ namespace MathLib.Logic.Tests
 
             //Assert
 
-            var actualBoxAResult = loadingPlan.First().PlacedBoxes.Single(b => b.Box.Equals(boxA)).Quantity;
-            var actualBoxBResult = loadingPlan.First().PlacedBoxes.Single(b => b.Box.Equals(boxB)).Quantity;
-            var actualBoxCResult = loadingPlan.First().PlacedBoxes.Single(b => b.Box.Equals(boxC)).Quantity;
+            var actualBoxAResult = loadingPlan.First().LoadingProgram.Single(b => b.Box.Equals(boxA)).Quantity;
+            var actualBoxBResult = loadingPlan.First().LoadingProgram.Single(b => b.Box.Equals(boxB)).Quantity;
+            var actualBoxCResult = loadingPlan.First().LoadingProgram.Single(b => b.Box.Equals(boxC)).Quantity;
 
             Assert.Equal(1, actualBoxAResult);
             Assert.Equal(0, actualBoxBResult);
@@ -212,9 +213,9 @@ namespace MathLib.Logic.Tests
 
             foreach (var container in loadingPlan)
             {
-                actualBoxAResult += container.PlacedBoxes.Single(b => b.Box.Equals(boxA)).Quantity;
-                actualBoxBResult += container.PlacedBoxes.Single(b => b.Box.Equals(boxB)).Quantity;
-                actualBoxCResult += container.PlacedBoxes.Single(b => b.Box.Equals(boxC)).Quantity;
+                actualBoxAResult += container.LoadingProgram.Single(b => b.Box.Equals(boxA)).Quantity;
+                actualBoxBResult += container.LoadingProgram.Single(b => b.Box.Equals(boxB)).Quantity;
+                actualBoxCResult += container.LoadingProgram.Single(b => b.Box.Equals(boxC)).Quantity;
             }
 
             Assert.Equal(1, actualBoxAResult);

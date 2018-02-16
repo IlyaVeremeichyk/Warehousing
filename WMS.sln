@@ -2,11 +2,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathLib.Logic", "MathLib.Logic\MathLib.Logic.csproj", "{56EED829-393D-47AA-B654-7F3C23281AC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WMS.MathLib.Logic", "MathLib.Logic\WMS.MathLib.Logic.csproj", "{56EED829-393D-47AA-B654-7F3C23281AC8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathLib.Logic.Tests", "MathLib.Logic.Tests\MathLib.Logic.Tests.csproj", "{3866345F-933F-4AA3-AE1C-80F1D9C54975}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WMS.MathLib.Logic.Tests", "MathLib.Logic.Tests\WMS.MathLib.Logic.Tests.csproj", "{3866345F-933F-4AA3-AE1C-80F1D9C54975}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Console", "Console\Console.csproj", "{92AE3986-B8A0-4A33-BAD6-B4F002FB8538}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WMS.DataMapper", "WMS.DataMapper\WMS.DataMapper.csproj", "{E8482AEE-2568-4BB5-B440-D329C4F2C57B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WMS.DataMapper.Tests", "WMS.DataMapper.Tests\WMS.DataMapper.Tests.csproj", "{B3D3E614-81E7-4544-A8CB-874D0E6DFFD1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FCAE6C70-ED64-4106-AD10-C80103201BA6}"
+	ProjectSection(SolutionItems) = preProject
+		3DRenderingCoffeeScript.js = 3DRenderingCoffeeScript.js
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +63,30 @@ Global
 		{92AE3986-B8A0-4A33-BAD6-B4F002FB8538}.Release|x64.Build.0 = Release|Any CPU
 		{92AE3986-B8A0-4A33-BAD6-B4F002FB8538}.Release|x86.ActiveCfg = Release|Any CPU
 		{92AE3986-B8A0-4A33-BAD6-B4F002FB8538}.Release|x86.Build.0 = Release|Any CPU
+		{E8482AEE-2568-4BB5-B440-D329C4F2C57B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8482AEE-2568-4BB5-B440-D329C4F2C57B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8482AEE-2568-4BB5-B440-D329C4F2C57B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E8482AEE-2568-4BB5-B440-D329C4F2C57B}.Debug|x64.Build.0 = Debug|Any CPU
+		{E8482AEE-2568-4BB5-B440-D329C4F2C57B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E8482AEE-2568-4BB5-B440-D329C4F2C57B}.Debug|x86.Build.0 = Debug|Any CPU
+		{E8482AEE-2568-4BB5-B440-D329C4F2C57B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8482AEE-2568-4BB5-B440-D329C4F2C57B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8482AEE-2568-4BB5-B440-D329C4F2C57B}.Release|x64.ActiveCfg = Release|Any CPU
+		{E8482AEE-2568-4BB5-B440-D329C4F2C57B}.Release|x64.Build.0 = Release|Any CPU
+		{E8482AEE-2568-4BB5-B440-D329C4F2C57B}.Release|x86.ActiveCfg = Release|Any CPU
+		{E8482AEE-2568-4BB5-B440-D329C4F2C57B}.Release|x86.Build.0 = Release|Any CPU
+		{B3D3E614-81E7-4544-A8CB-874D0E6DFFD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3D3E614-81E7-4544-A8CB-874D0E6DFFD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3D3E614-81E7-4544-A8CB-874D0E6DFFD1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B3D3E614-81E7-4544-A8CB-874D0E6DFFD1}.Debug|x64.Build.0 = Debug|Any CPU
+		{B3D3E614-81E7-4544-A8CB-874D0E6DFFD1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B3D3E614-81E7-4544-A8CB-874D0E6DFFD1}.Debug|x86.Build.0 = Debug|Any CPU
+		{B3D3E614-81E7-4544-A8CB-874D0E6DFFD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3D3E614-81E7-4544-A8CB-874D0E6DFFD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3D3E614-81E7-4544-A8CB-874D0E6DFFD1}.Release|x64.ActiveCfg = Release|Any CPU
+		{B3D3E614-81E7-4544-A8CB-874D0E6DFFD1}.Release|x64.Build.0 = Release|Any CPU
+		{B3D3E614-81E7-4544-A8CB-874D0E6DFFD1}.Release|x86.ActiveCfg = Release|Any CPU
+		{B3D3E614-81E7-4544-A8CB-874D0E6DFFD1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

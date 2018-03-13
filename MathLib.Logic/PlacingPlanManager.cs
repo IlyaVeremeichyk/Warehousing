@@ -14,6 +14,7 @@ namespace MathLib.Logic
         private int _boxesQuantityBeforePlacing;
         private int _boxesQuantityAfterPlacing;
         private int _distanceLeftToTheCeiling;
+        private int _distanceLeftToTheWall;
         private bool _isFirstRow;
 
         private readonly List<Box> _rowOfBoxes;    // the collection of boxes that forms a 'row' in a container
@@ -66,14 +67,21 @@ namespace MathLib.Logic
 
             foreach (Container container in containersSet)
             {
-                var containerWidth = container.Width;
+                _distanceLeftToTheWall = container.Width;
 
                 // filling one row
-                while (containerWidth > 0 && boxesSet.Any(b => b.Quantity > 0))
+                while (_distanceLeftToTheWall > 0 && boxesSet.Any(b => b.Quantity > 0))
                 {
                     foreach (var placedBox in boxesSet.Where(b => b.Quantity != 0))
                     {
-                        while (FindDistanceLeftToTheWallOfContainer(container) >= placedBox.Box.Width && placedBox.Quantity > 0)
+                        if (_distanceLeftToTheWall < placedBox.Box.Width && boxesSet.Count(b => b.Quantity != 0) == 1)
+                        {
+                            RotateBox(placedBox.Box);
+                        }
+
+                        while (FindDistanceLeftToTheWallOfContainer(container) >= placedBox.Box.Length &&
+                               _distanceLeftToTheWall >= placedBox.Box.Width &&
+                               placedBox.Quantity > 0)
                         {
                             DefineRowsWidthOnTheFirstPlacingBox(placedBox.Box);
                             PlaceFirstLevelOfBoxes(placedBox, container);
@@ -85,7 +93,7 @@ namespace MathLib.Logic
 
                     _rowsSet.Add(ReturnDeepListCopy(_rowOfBoxes));
 
-                    containerWidth -= _rowWidth;
+                    _distanceLeftToTheWall -= _rowWidth;
                     _yo += _rowWidth;
                     _xo = _zo = 0;
 
@@ -165,7 +173,7 @@ namespace MathLib.Logic
         {
             if (!_rowOfBoxes.Any())
             {
-                if (box.Length > box.Width)
+                if (box.Length > box.Width && _distanceLeftToTheWall > box.Length)
                 {
                     RotateBox(box);
                 }

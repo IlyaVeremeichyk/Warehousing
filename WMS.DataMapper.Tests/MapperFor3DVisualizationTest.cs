@@ -22,11 +22,11 @@ namespace WMS.DataMapper.Tests
 
         public MapperFor3DVisualizationTest()
         {
-            boxA = new BoxQunatityPair { Box = new Box("A", length: 60, width: 60, height: 200), Quantity = 6 };
-            boxB = new BoxQunatityPair { Box = new Box("B", length: 55, width: 60, height: 80), Quantity = 12};
+            boxA = new BoxQunatityPair { Box = new Box("A", length: 60, width: 60, height: 200), Quantity = 7 };
+            boxB = new BoxQunatityPair { Box = new Box("B", length: 55, width: 100, height: 80), Quantity = 15};
             boxC = new BoxQunatityPair { Box = new Box("C", length: 20, width: 20, height: 30), Quantity = 100 };
 
-            containerA = new Container("Name1", length: 300, width: 250, height: 200);
+            containerA = new Container("Name1", length: 300, width: 280, height: 200);
 
             boxesSet = new List<BoxQunatityPair> { boxA, boxB, boxC };
             containersSet = new List<Container> { containerA };

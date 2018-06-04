@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using MathLib.Logic.Models;
 using WMS.DataMapper.Models;
@@ -25,20 +24,22 @@ namespace WMS.DataMapper
             _boxColorDictionary = new Dictionary<string, string>();
         }
 
-        public PlacingPlanRenderingModel GetPlacingPlanAdaptedForSeenjsRendering(Container container, double executionPercent)
+        public PlacingPlanRenderingModel GetPlacingPlanAdaptedForSeenjsRendering(ModelingResult modelingResult)
         {
             var result = new PlacingPlanRenderingModel();
 
+            var container = modelingResult.Container;
             result.Container = new ContainerRenderingModel { Name = container.Name, Width = container.Width + Interval, Length = container.Length + Interval};
-            result.ExecutionPercent = executionPercent;
 
-            foreach(var line in container.PlacingPlan)
+            result.ExecutionPercent = modelingResult.ExecutionPercent;
+
+            foreach(var line in modelingResult.PlacingPlan)
             {
                 foreach(var box in line)
                 {
                     var item = new BoxRenderingModel
                     {
-                        LineNumber = container.PlacingPlan.IndexOf(line) + 1,
+                        LineNumber = modelingResult.PlacingPlan.IndexOf(line) + 1,
                         Xo = box.XPos + Interval,
                         X1 = box.XPos + box.Length + Interval,
                         Yo = box.YPos + Interval,
@@ -56,6 +57,8 @@ namespace WMS.DataMapper
             return result;
         }
 
+        #region Private methods
+
         private string DefineBoxColor(string boxName)
         {
             if (_boxColorDictionary.Keys.Contains(boxName))
@@ -69,5 +72,7 @@ namespace WMS.DataMapper
 
             return freeColor;
         }
+
+        #endregion
     }
 }

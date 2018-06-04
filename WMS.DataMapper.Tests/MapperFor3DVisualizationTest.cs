@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using MathLib.Logic;
+using MathLib.Logic.MathModelingProviders;
 using MathLib.Logic.Models;
+using MathLib.Logic.ResultsProvider;
 using Xunit;
 
 using Newtonsoft.Json;
@@ -11,27 +12,23 @@ namespace WMS.DataMapper.Tests
 {
     public class MapperFor3DVisualizationTest
     {
-        private MapperFor3DVisualization _mapperFor3DVisualization;
-        private readonly PlacingPlanManager _placingPlanManager;
+        private readonly MapperFor3DVisualization _mapperFor3DVisualization;
+        private readonly ModelingResultsProvider _resultsProvider;
 
-        private readonly BoxQunatityPair boxA, boxB, boxC;
-        private readonly Container containerA;
-
-        private readonly List<BoxQunatityPair> boxesSet;
-        private readonly List<Container> containersSet;
+        private readonly List<Box> _boxesSet;
+        private readonly Container _container;
 
         public MapperFor3DVisualizationTest()
         {
-            boxA = new BoxQunatityPair { Box = new Box("A", length: 60, width: 60, height: 200), Quantity = 7 };
-            boxB = new BoxQunatityPair { Box = new Box("B", length: 55, width: 100, height: 80), Quantity = 15};
-            boxC = new BoxQunatityPair { Box = new Box("C", length: 20, width: 20, height: 30), Quantity = 100 };
+            var boxA = new Box("A", length: 60, width: 60, height: 200, weight: 2D, cost: 65, orderQuantity: 5);
+            var boxB = new Box("B", length: 55, width: 100, height: 80, weight: 3D, cost: 80, orderQuantity: 5);
+            var boxC = new Box("C", length: 20, width: 20, height: 30, weight: 1D, cost: 30, orderQuantity: 5);
 
-            containerA = new Container("Name1", length: 300, width: 280, height: 200);
+            _container = new Container("Name1", length: 300, width: 280, height: 200, capacity: 5D);
 
-            boxesSet = new List<BoxQunatityPair> { boxA, boxB, boxC };
-            containersSet = new List<Container> { containerA };
+            _boxesSet = new List<Box> { boxA, boxB, boxC };
 
-            _placingPlanManager = new PlacingPlanManager();
+            _resultsProvider = new ModelingResultsProvider();
             _mapperFor3DVisualization = new MapperFor3DVisualization();
         }
 
@@ -39,10 +36,10 @@ namespace WMS.DataMapper.Tests
         public void GetPlacingPlanAdaptedForSeenjsRendering_ReturnsRenderedData()
         {
             // Act
-            var packagingPlan = _placingPlanManager.GetPlacingPlan(boxesSet, containersSet);
-            var executionPercent = _placingPlanManager.CountExecutionPercent();
 
-            var renderedResult = _mapperFor3DVisualization.GetPlacingPlanAdaptedForSeenjsRendering(packagingPlan.First(), executionPercent);
+            var result = _resultsProvider.GetLoadingAndPlacingPrograms(_boxesSet, _container);
+
+            var renderedResult = _mapperFor3DVisualization.GetPlacingPlanAdaptedForSeenjsRendering(result);
 
             File.WriteAllText(@"D:\placingPlan.json", JsonConvert.SerializeObject(renderedResult));
 

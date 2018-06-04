@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using MathLib.Logic.Models;
 
-namespace MathLib.Logic
+[assembly: InternalsVisibleTo("WMS.MathLib.Logic.Tests")]
+[assembly: InternalsVisibleTo("WMS.DataMapper.Tests")]
+namespace MathLib.Logic.MathModelingProviders
 {
-    public class PlacingPlanManager
+    internal class PlacingPlanProvider
     {
-        #region Fields
-
         private int _xo, _yo, _zo;
         private int _rowWidth;
         private int _boxesQuantityBeforePlacing;
@@ -19,44 +20,32 @@ namespace MathLib.Logic
 
         private readonly List<Box> _rowOfBoxes;    // the collection of boxes that forms a 'row' in a container
         private readonly List<List<Box>> _rowsSet; // the collection of 'rows' in a container
-        private readonly List<Container> _filledContainers; // placing program
 
         private List<Box> _platformsSet;  // the collection of platforms; a platform is an area, that if formed by top surface of nearby boxes
 
-        private int Delta
-        {
-            get { return _isFirstRow ? 0 : _rowsSet.Sum(b => b.First().Width); }
-        }
+        private int Delta => _isFirstRow ? 0 : _rowsSet.Sum(b => b.First().Width);
 
-        #endregion
-
-        #region Constructors
-
-        public PlacingPlanManager()
+        internal PlacingPlanProvider()
         {
             _rowOfBoxes = new List<Box>();
             _rowsSet = new List<List<Box>>();
             _platformsSet = new List<Box>();
-            _filledContainers = new List<Container>();
             _isFirstRow = true;
         }
-        #endregion
 
-        #region Public methods
-
-        public List<Container> GetPlacingPlan(List<BoxQunatityPair> boxesSet, List<Container> containersSet)
+        internal List<List<Box>> GetPlacingPlan(List<BoxQuantityPair> boxesSet, Container container)
         {
             if (boxesSet == null || !boxesSet.Any())
             {
                 throw new ArgumentException("The list of boxes can not be null or empty");
             }
 
-            if (containersSet == null || !containersSet.Any())
+            if (container == null)
             {
-                throw new ArgumentException("The list of containers can not be null or empty");
+                throw new ArgumentNullException(nameof(container));
             }
 
-            if (!IsAllPAssedDataValid(boxesSet, containersSet))
+            if (!IsAllPAssedDataValid(boxesSet, container))
             {
                 throw new ArgumentException("Passed data contains invalid content: length, width or height of a box or a container can not be 0 or negative.");
             }
@@ -65,52 +54,44 @@ namespace MathLib.Logic
 
             SortBoxesByVolumeDesc(boxesSet);
 
-            foreach (Container container in containersSet)
+            _distanceLeftToTheWall = container.Width;
+
+            while (_distanceLeftToTheWall > 0 && boxesSet.Any(b => b.Quantity > 0))
             {
-                _distanceLeftToTheWall = container.Width;
-
-                // filling one row
-                while (_distanceLeftToTheWall > 0 && boxesSet.Any(b => b.Quantity > 0))
+                foreach (var placedBox in boxesSet.Where(b => b.Quantity != 0))
                 {
-                    foreach (var placedBox in boxesSet.Where(b => b.Quantity != 0))
+                    if (_distanceLeftToTheWall < placedBox.Box.Width && boxesSet.Count(b => b.Quantity != 0) == 1)
                     {
-                        if (_distanceLeftToTheWall < placedBox.Box.Width && boxesSet.Count(b => b.Quantity != 0) == 1)
-                        {
-                            RotateBox(placedBox.Box);
-                        }
-
-                        while (FindDistanceLeftToTheWallOfContainer(container) >= placedBox.Box.Length &&
-                               _distanceLeftToTheWall >= placedBox.Box.Width &&
-                               placedBox.Quantity > 0)
-                        {
-                            DefineRowsWidthOnTheFirstPlacingBox(placedBox.Box);
-                            PlaceFirstLevelOfBoxes(placedBox, container);
-                        }
+                        RotateBox(placedBox.Box);
                     }
 
-                    DefineTheSecondBoxesLevel(container);
-                    PlaceTheSecondLevelOfBoxes(boxesSet);
-
-                    _rowsSet.Add(ReturnDeepListCopy(_rowOfBoxes));
-
-                    _distanceLeftToTheWall -= _rowWidth;
-                    _yo += _rowWidth;
-                    _xo = _zo = 0;
-
-                    _platformsSet.Clear();
-                    _rowOfBoxes.Clear();
-
-                    _isFirstRow = false;
+                    while (FindDistanceLeftToTheWallOfContainer(container) >= placedBox.Box.Length &&
+                           _distanceLeftToTheWall >= placedBox.Box.Width &&
+                           placedBox.Quantity > 0)
+                    {
+                        DefineRowsWidthOnTheFirstPlacingBox(placedBox.Box);
+                        PlaceFirstLevelOfBoxes(placedBox, container);
+                    }
                 }
 
-                container.PlacingPlan = ReturnDeepListCopy(_rowsSet);
-                _filledContainers.Add(container);
-                _rowsSet.Clear();
+                DefineTheSecondBoxesLevel(container);
+                PlaceTheSecondLevelOfBoxes(boxesSet);
+
+                _rowsSet.Add(ReturnDeepListCopy(_rowOfBoxes));
+
+                _distanceLeftToTheWall -= _rowWidth;
+                _yo += _rowWidth;
+                _xo = _zo = 0;
+
+                _platformsSet.Clear();
+                _rowOfBoxes.Clear();
+
+                _isFirstRow = false;
             }
 
             _boxesQuantityAfterPlacing = CountTotalBoxesQuantity(boxesSet);
 
-            return _filledContainers;
+            return _rowsSet;
         }
 
         public double CountExecutionPercent()
@@ -118,11 +99,9 @@ namespace MathLib.Logic
             return Double.Parse((100 - (double)_boxesQuantityAfterPlacing / _boxesQuantityBeforePlacing * 100).ToString("F2"));
         }
 
-        #endregion
-
         #region Private methods
 
-        private bool IsAllPAssedDataValid(List<BoxQunatityPair> boxesSet, List<Container> containersSet)
+        private bool IsAllPAssedDataValid(List<BoxQuantityPair> boxesSet, Container container)
         {
             foreach (var placedBox in boxesSet)
             {
@@ -134,18 +113,15 @@ namespace MathLib.Logic
                 }
             }
 
-            foreach (var container in containersSet)
+            if (container.Length <= 0 || container.Width <= 0 || container.Height <= 0)
             {
-                if (container.Length <= 0 || container.Width <= 0 || container.Height <= 0)
-                {
-                    return false;
-                }
+                return false;
             }
 
             return true;
         }
 
-        private int CountTotalBoxesQuantity(List<BoxQunatityPair> boxesSet)
+        private int CountTotalBoxesQuantity(List<BoxQuantityPair> boxesSet)
         {
             int totalBoxesQuantity = 0;
 
@@ -157,7 +133,7 @@ namespace MathLib.Logic
             return totalBoxesQuantity;
         }
 
-        private void SortBoxesByVolumeDesc(List<BoxQunatityPair> boxesSet)
+        private void SortBoxesByVolumeDesc(List<BoxQuantityPair> boxesSet)
         {
             boxesSet.OrderByDescending(pair => pair.Box.Volume);
         }
@@ -195,7 +171,7 @@ namespace MathLib.Logic
             }
         }
 
-        private void PlaceTheSameBoxOnTheTop(BoxQunatityPair boxQuantityPair, int destinationXPos, int destinationYPos, ref int destinationZPos)
+        private void PlaceTheSameBoxOnTheTop(BoxQuantityPair boxQuantityPair, int destinationXPos, int destinationYPos, ref int destinationZPos)
         {
             var box = boxQuantityPair.Box;
 
@@ -207,7 +183,7 @@ namespace MathLib.Logic
             _distanceLeftToTheCeiling -= box.Height;
         }
 
-        private void PutTheSameBoxOnTheTop(BoxQunatityPair boxQuantityPair, int destinationXPos, int destinationYPos, int destinationZPos)
+        private void PutTheSameBoxOnTheTop(BoxQuantityPair boxQuantityPair, int destinationXPos, int destinationYPos, int destinationZPos)
         {
             var isPossibleToPutAnotherOne = true;
 
@@ -225,13 +201,13 @@ namespace MathLib.Logic
             }
         }
 
-        private void PutTheSameBoxInFrontOf(BoxQunatityPair boxQuantityPair, int destinationYPos, int containerHeight)
+        private void PutTheSameBoxInFrontOf(BoxQuantityPair boxQuantityPair, int destinationYPos, int containerHeight)
         {
             var box = boxQuantityPair.Box;
             var widthDistanceLeft = _rowWidth - boxQuantityPair.Box.Width;
             var destinationZPos = 0;
 
-            while (widthDistanceLeft >= boxQuantityPair.Box.Width && 
+            while (widthDistanceLeft >= boxQuantityPair.Box.Width &&
                    boxQuantityPair.Quantity > 0 &&
                    _yo + _rowWidth >= destinationYPos + boxQuantityPair.Box.Width)
             {
@@ -260,12 +236,12 @@ namespace MathLib.Logic
             return container.Width - (_rowOfBoxes.Last().XPos + _rowOfBoxes.Last().Length);
         }
 
-        private BoxQunatityPair FindTheMostSuitableBoxForThePlatform(List<BoxQunatityPair> boxesSet, Box platform)
+        private BoxQuantityPair FindTheMostSuitableBoxForThePlatform(List<BoxQuantityPair> boxesSet, Box platform)
         {
             // Box is the most suitable if after its placing, the distance left to the ceiling is minimum
 
             var heightLeft = 100000000000D;
-            BoxQunatityPair theMostSuitableBox = null;
+            BoxQuantityPair theMostSuitableBox = null;
 
             foreach (var boxQuantityPair in boxesSet.Where(b => b.Quantity != 0))
             {
@@ -273,7 +249,7 @@ namespace MathLib.Logic
 
                 var heightWillBeLeft = platform.Height - boxesInStackQuantity * boxQuantityPair.Box.Height;
 
-                if (heightWillBeLeft >= 0 && 
+                if (heightWillBeLeft >= 0 &&
                     heightWillBeLeft < heightLeft &&
                     boxQuantityPair.Box.Length <= platform.Length && boxQuantityPair.Box.Width <= platform.Length &&
                     boxQuantityPair.Box.Length <= platform.Width - platform.YPos + Delta && boxQuantityPair.Box.Width <= platform.Width - platform.YPos + Delta)
@@ -286,7 +262,7 @@ namespace MathLib.Logic
             return theMostSuitableBox;
         }
 
-        private void AddSecondRowBox(BoxQunatityPair boxQuantityPair, Box platform)
+        private void AddSecondRowBox(BoxQuantityPair boxQuantityPair, Box platform)
         {
             var box = boxQuantityPair.Box;
 
@@ -300,7 +276,7 @@ namespace MathLib.Logic
             PutTheSameBoxOnTheTop(boxQuantityPair, platform.XPos, platform.YPos, platform.ZPos + box.Height);
         }
 
-        private void PlaceFirstLevelOfBoxes(BoxQunatityPair boxQuantityPair, Container container)
+        private void PlaceFirstLevelOfBoxes(BoxQuantityPair boxQuantityPair, Container container)
         {
             var box = boxQuantityPair.Box;
 
@@ -378,7 +354,7 @@ namespace MathLib.Logic
             _platformsSet = platformSet;
         }
 
-        private void PlaceTheSecondLevelOfBoxes(List<BoxQunatityPair> boxesSet)
+        private void PlaceTheSecondLevelOfBoxes(List<BoxQuantityPair> boxesSet)
         {
             foreach (var platform in _platformsSet)
             {
@@ -389,7 +365,7 @@ namespace MathLib.Logic
                 {
                     var theMostSuitableBox = FindTheMostSuitableBoxForThePlatform(boxesSet, platform);
 
-                    if (theMostSuitableBox != null && 
+                    if (theMostSuitableBox != null &&
                         theMostSuitableBox.Box.Width + rowLength <= platform.Length)
                     {
                         var box = theMostSuitableBox.Box;
@@ -432,19 +408,6 @@ namespace MathLib.Logic
             return result;
         }
 
-        private List<List<Box>> ReturnDeepListCopy(List<List<Box>> list)
-        {
-            var result = new List<List<Box>>();
-
-            foreach (var box in list)
-            {
-                result.Add(ReturnDeepListCopy(box));
-            }
-
-            return result;
-        }
-
         #endregion
     }
-
 }

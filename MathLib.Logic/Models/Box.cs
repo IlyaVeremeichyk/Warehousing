@@ -4,32 +4,32 @@ namespace MathLib.Logic.Models
 {
     public class Box : IEquatable<Box>
     {
-        #region Properties
+        public string Name { get; }
 
-        public string Name { get; set; }
+        public double Weight { get; }
+
+        public int Cost { get; }
+
+        public int Length { get; set; }
+
+        public int Width { get; set; }
+
+        public int Height { get; set; }
 
         public int OrderQuantity { get; set; }
 
-        public double Weight { get; set; }
-
-        public int Cost { get; set; }
-
-        public int Length { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
-
         public int XPos { get; set; } // x coordinate of a box
+
         public int YPos { get; set; } // y coordinate of a box
+
         public int ZPos { get; set; } // z coordinate of a box
 
-        public int Volume { get { return Length * Width * Height; } }
-        public int BaseArea { get { return Length * Width; } } // the square of a box bottom
+        public int Volume => Length * Width * Height;
 
-        #endregion
+        public int BaseArea => Length * Width; // the square of a box bottom
 
-        #region Constructors
-
-        public Box(string name = null, double weight = 0, int cost = 0, int length = 0, int width = 0, int height = 0, int orderQuantity = 0, int x = 0, int y = 0, int z = 0)
+        public Box(string name = null, double weight = 0, int cost = 0, int length = 0, int width = 0,
+                   int height = 0, int orderQuantity = 0, int x = 0, int y = 0, int z = 0)
         {
             Name = name;
             Weight = weight;
@@ -42,10 +42,6 @@ namespace MathLib.Logic.Models
             YPos = y;
             ZPos = z;
         }
-
-        #endregion
-
-        #region Public methods
 
         public bool Equals(Box box)
         {
@@ -92,17 +88,12 @@ namespace MathLib.Logic.Models
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                return Volume * Name.GetHashCode() + Width + Height * 1000000;
-            }
+            return (int)(Name.GetHashCode() + Weight + Cost);
         }
 
         public override string ToString()
         {
             return $"The box with name '{Name}'";
         }
-
-        #endregion
     }
 }

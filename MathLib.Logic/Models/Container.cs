@@ -1,32 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace MathLib.Logic.Models
 {
     public class Container : IEquatable<Container>
     {
-        #region Properties
+        public string Name { get; }
 
-        public string Name { get; set; }
+        public double Capacity { get; }
 
-        public double Capacity { get; set; }
+        public int Length { get; }
 
-        public int Length { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public int Width { get; }
 
-        public int Volume { get { return Length * Width * Height; } }
+        public int Height { get; }
 
-        // The collection of boxes to be placed in this container
-        // Box - a box object, int - boxes quantity
-        public List<BoxQunatityPair> PlacedBoxes { get; internal set; }
-
-        // Each internal list is one row of placing
-        public List<List<Box>> PlacingPlan { get; internal set; } 
-
-        #endregion
-
-        #region Constructors
+        public int Volume => Length * Width * Height;
 
         public Container(string name = "", double capacity = 0, int length = 0, int width = 0, int height = 0)
         {
@@ -35,12 +23,7 @@ namespace MathLib.Logic.Models
             Length = length;
             Width = width;
             Height = height;
-            PlacedBoxes = new List<BoxQunatityPair>();
         }
-
-        #endregion
-
-        #region Public methods
 
         public bool Equals(Container container)
         {
@@ -95,9 +78,7 @@ namespace MathLib.Logic.Models
 
         public override string ToString()
         {
-            return $"Containt with name '{Name}'";
+            return $"Container with name '{Name}'";
         }
-
-        #endregion
     }
 }

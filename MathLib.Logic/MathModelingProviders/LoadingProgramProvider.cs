@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using MathLib.Logic.Models;
 
-namespace MathLib.Logic
+[assembly: InternalsVisibleTo("WMS.MathLib.Logic.Tests")]
+[assembly: InternalsVisibleTo("WMS.DataMapper.Tests")]
+namespace MathLib.Logic.MathModelingProviders
 {
     /// <summary>
     /// Contains the logic of a dynamic programming mathematical model
     /// </summary>
-    public class LoadingProgramManager
+    internal class LoadingProgramProvider
     {
-
-        #region Fields
-
         /// <summary>
         /// Intermediate data: the collection of optimal solutions set for each box
         /// Item 2 - MaxProfit
@@ -23,65 +23,52 @@ namespace MathLib.Logic
         /// <summary>
         /// Output data: the collection of filled containers
         /// </summary>
-        private readonly List<Container> _filledContainers;
+        private List<BoxQuantityPair> _modelingResults;
 
-        #endregion
-
-        #region Constructors
-
-        public LoadingProgramManager()
+        internal LoadingProgramProvider()
         {
             _optimalSolutionsSet = new LinkedList<List<Tuple<Box, double, int>>>();
-            _filledContainers = new List<Container>();
+            _modelingResults = new List<BoxQuantityPair>();
         }
 
-        #endregion
-
-        #region Public methods
-
-        public List<Container> GetLoadProgram(List<Box> boxes, List<Container> containers)
+        internal List<BoxQuantityPair> GetLoadProgram(List<Box> boxes, Container container)
         {
             if (boxes == null || !boxes.Any())
             {
                 throw new ArgumentException("The list of boxes can not be null or empty");
             }
 
-            if (containers == null || !containers.Any())
+            if (container == null)
             {
-                throw new ArgumentException("The list of containers can not be null or empty");
+                throw new ArgumentNullException(nameof(container));
             }
 
-            if (!IsAllPAssedDataValid(boxes, containers))
+            if (!IsAllPAssedDataValid(boxes, container))
             {
                 throw new ArgumentException("Passed data contains invalid content: weight, cost or order quantity of a box or capacity of a container can not be 0 or negative.");
             }
 
-            SortPassedValues(boxes, containers);
+            SortPassedValues(boxes);
 
-            foreach (Container container in containers)
+            foreach (Box box in boxes)
             {
-                foreach (Box box in boxes)
-                {
-                    // counting optimal solutions matrix for each box for the current container
-                    ReverseSweep(box, container); 
-                }
-
-                // counting optimal boxes combination for the current container
-                DirectSweep(container);
-
-                _optimalSolutionsSet.Clear();
-
-                CheckConstraints(boxes, container);
+                // counting optimal solutions matrix for each box for the current container
+                ReverseSweep(box, container);
             }
 
-            return _filledContainers;
-        }
+            // counting optimal boxes combination for the current container
+            DirectSweep(container);
 
-        #endregion
+            _optimalSolutionsSet.Clear();
+
+            CheckConstraints(boxes, container);
+
+            return _modelingResults;
+        }
 
         #region Private methods
 
-        private bool IsAllPAssedDataValid(List<Box> boxes, List<Container> containers)
+        private bool IsAllPAssedDataValid(List<Box> boxes, Container container)
         {
             foreach (var box in boxes)
             {
@@ -91,22 +78,17 @@ namespace MathLib.Logic
                 }
             }
 
-            foreach (var container in containers)
+            if (container.Capacity <= 0)
             {
-                if (container.Capacity <= 0)
-                {
-                    return false;
-                }
+                return false;
             }
 
             return true;
         }
 
-        private void SortPassedValues(List<Box> boxes, List<Container> containers)
+        private void SortPassedValues(List<Box> boxes)
         {
             boxes.Sort((a, b) => b.Cost.CompareTo(a.Cost));
-
-            containers.Sort((a, b) => b.Capacity.CompareTo(a.Capacity));
         }
 
         private double CountTheMaximumBoxesQuantityForTheContainer(Box box, Container container)
@@ -136,31 +118,31 @@ namespace MathLib.Logic
 
         private void CheckConstraintsForSize(Container container)
         {
-            var placedBoxQuantity = container.PlacedBoxes.Count - 1;
+            var placedBoxQuantity = _modelingResults.Count - 1;
 
-            for (int i= placedBoxQuantity; i >= 0; i--)
+            for (int i = placedBoxQuantity; i >= 0; i--)
             {
-                var box = container.PlacedBoxes[i].Box;
+                var box = _modelingResults[i].Box;
 
                 // Constraint: a box can be placed only on its base
                 if (box.Length > container.Length || box.Length > container.Width ||
-                    box.Width > container.Length  || box.Width > container.Width  ||
+                    box.Width > container.Length || box.Width > container.Width ||
                     box.Height > container.Height)
                 {
-                    container.PlacedBoxes.RemoveAt(i);
+                    _modelingResults.RemoveAt(i);
                 }
             }
         }
 
         private void CheckConstraintsForVolume(Container container)
         {
-            for (int i = 0; i < container.PlacedBoxes.Count; i++)
+            for (int i = 0; i < _modelingResults.Count; i++)
             {
-                while (CountTotalBoxesVolume(container.PlacedBoxes) > container.Volume)
+                while (CountTotalBoxesVolume(_modelingResults) > container.Volume)
                 {
-                    if (container.PlacedBoxes[i].Quantity != 0)
+                    if (_modelingResults[i].Quantity != 0)
                     {
-                        container.PlacedBoxes[i].Quantity--;
+                        _modelingResults[i].Quantity--;
                     }
                     else
                     {
@@ -178,36 +160,36 @@ namespace MathLib.Logic
 
         private void DowngradeToOrderSizeLevel(Container container)
         {
-            for (int i = 0; i < container.PlacedBoxes.Count; i++)
+            for (int i = 0; i < _modelingResults.Count; i++)
             {
-                var orderQuantity = container.PlacedBoxes[i].Box.OrderQuantity;
+                var orderQuantity = _modelingResults[i].Box.OrderQuantity;
 
-                if (container.PlacedBoxes[i].Quantity > orderQuantity)
+                if (_modelingResults[i].Quantity > orderQuantity)
                 {
-                    container.PlacedBoxes[i].Quantity = orderQuantity;
+                    _modelingResults[i].Quantity = orderQuantity;
                 }
             }
         }
 
         private void RaiseToOrderLevel(Container container)
         {
-            for (int i = 0; i < container.PlacedBoxes.Count; i++)
+            for (int i = 0; i < _modelingResults.Count; i++)
             {
-                var box = container.PlacedBoxes[i].Box;
-                var quantity = container.PlacedBoxes[i].Quantity;
+                var box = _modelingResults[i].Box;
+                var quantity = _modelingResults[i].Quantity;
                 var isMaxPossibleQuantity = false;
 
                 if (quantity < box.OrderQuantity)
                 {
                     while (!isMaxPossibleQuantity)
                     {
-                        container.PlacedBoxes[i].Quantity++;
+                        _modelingResults[i].Quantity++;
 
-                        if (!DoesMeetTheVolumeLimit(container) || 
+                        if (!DoesMeetTheVolumeLimit(container) ||
                             !DoesMeetTheWeightLimit(container) ||
                             quantity > box.OrderQuantity)
                         {
-                            container.PlacedBoxes[i].Quantity--;
+                            _modelingResults[i].Quantity--;
                             isMaxPossibleQuantity = true;
                         }
                     }
@@ -217,15 +199,15 @@ namespace MathLib.Logic
 
         private bool DoesMeetTheWeightLimit(Container container)
         {
-            return CountTotalBoxesWeight(container.PlacedBoxes) < container.Capacity;
+            return CountTotalBoxesWeight(_modelingResults) < container.Capacity;
         }
 
         private bool DoesMeetTheVolumeLimit(Container container)
         {
-            return CountTotalBoxesVolume(container.PlacedBoxes) < container.Volume;
+            return CountTotalBoxesVolume(_modelingResults) < container.Volume;
         }
 
-        private double CountTotalBoxesVolume(List<BoxQunatityPair> boxesSet)
+        private double CountTotalBoxesVolume(List<BoxQuantityPair> boxesSet)
         {
             double volume = 0;
 
@@ -237,7 +219,7 @@ namespace MathLib.Logic
             return volume;
         }
 
-        private double CountTotalBoxesWeight(List<BoxQunatityPair> boxesSet)
+        private double CountTotalBoxesWeight(List<BoxQuantityPair> boxesSet)
         {
             double weight = 0;
 
@@ -297,7 +279,7 @@ namespace MathLib.Logic
 
         private void DirectSweep(Container container)
         {
-            var optimalBoxCombination = new List<BoxQunatityPair>();
+            var optimalBoxCombination = new List<BoxQuantityPair>();
             int leftContainerCapacity = 0;
             int optimalBoxQuantity = 0;
 
@@ -310,7 +292,7 @@ namespace MathLib.Logic
                 if (currentBoxOptimalsMatrix == _optimalSolutionsSet.First)
                 {
                     optimalBoxQuantity = FindQuantityForMaxProfitInOptimalSolutionMatrix(currentBoxOptimalsMatrix.Value, out leftContainerCapacity);
-                    optimalBoxCombination.Add(new BoxQunatityPair(currentBox, optimalBoxQuantity));
+                    optimalBoxCombination.Add(new BoxQuantityPair(currentBox, optimalBoxQuantity));
                 }
                 else
                 {
@@ -320,7 +302,7 @@ namespace MathLib.Logic
 
                     optimalBoxQuantity = currentBoxOptimalsMatrix.Value.ElementAt(containerCapacityForMaxProfit).Item3; // Item3 - OptimalQuantity
 
-                    optimalBoxCombination.Add(new BoxQunatityPair(currentBox, optimalBoxQuantity));
+                    optimalBoxCombination.Add(new BoxQuantityPair(currentBox, optimalBoxQuantity));
 
                     leftContainerCapacity = containerCapacityForMaxProfit;
                 }
@@ -328,8 +310,7 @@ namespace MathLib.Logic
                 currentBoxOptimalsMatrix = currentBoxOptimalsMatrix.Next;
             }
 
-            container.PlacedBoxes = optimalBoxCombination;
-            _filledContainers.Add(container);
+            _modelingResults = optimalBoxCombination;
         }
 
         private void CheckConstraints(List<Box> boxes, Container container)
@@ -338,15 +319,15 @@ namespace MathLib.Logic
             CheckConstraintsForVolume(container);
             CheckConstraintsForOrder(container);
 
-            DecreaseBoxesOrderQuantityAfterContainerFilled(boxes, container);
+            DecreaseBoxesOrderQuantityAfterContainerFilled(boxes);
         }
 
-        private void DecreaseBoxesOrderQuantityAfterContainerFilled(List<Box> boxes, Container container)
+        private void DecreaseBoxesOrderQuantityAfterContainerFilled(List<Box> boxes)
         {
-            for (int i = 0; i < container.PlacedBoxes.Count; i++)
+            for (int i = 0; i < _modelingResults.Count; i++)
             {
-                var box = container.PlacedBoxes[i].Box;
-                var quantity = container.PlacedBoxes[i].Quantity;
+                var box = _modelingResults[i].Box;
+                var quantity = _modelingResults[i].Quantity;
 
                 var boxToChange = boxes.SingleOrDefault(b => b.Equals(box));
 

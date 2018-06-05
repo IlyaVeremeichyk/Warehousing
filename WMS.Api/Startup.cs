@@ -29,6 +29,9 @@ namespace WMS.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
         }
     }
 }

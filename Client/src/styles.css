@@ -1,1 +1,578 @@
 /* You can add global styles to this file, and also import other style files */
+/*div{border: 1px solid red;}*/
+
+.temp-divider{
+	border-bottom: 3px solid #666;
+	margin-bottom: 20px;
+}
+
+::-webkit-scrollbar {
+	height: 10px;
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+	background: #E5E6FA; 
+}
+::-webkit-scrollbar-thumb {
+    background: #79A5A2; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #666; 
+}
+
+*{
+	cursor: default;
+	font-family: 'akrobat';
+	font-size: 20px;
+}
+
+
+@media only screen and (max-width: 2000px) {
+	a, a:active, a:hover, a:visited{
+		text-decoration: none;
+	}
+
+	a, a:active, a:hover, a:visited,
+	.container-top-line-tab,
+	.container-menu-item,
+	.container-content-horizontal-list-item,
+	.container-content-button,
+	.container-menu-item{
+		cursor: pointer;
+	}
+
+	a, a:active, a:hover, a:visited,
+	.container-top-line-menu,
+	.container-top-line-tab,
+	.container-content-search-line-icon,
+	.container-content-dropdown-title,
+	.container-content-progress-bar-title, 
+	.container-content-progress-bar-percent,
+	.container-content-table-row-first,
+	.container-menu-item-icon,
+	.container-content-button{
+		color: #fff;
+	}
+
+	.container-content-table-row .container-content-table-row-first,
+	.container-content-table-row .container-content-table-row-content,
+	.container-content-table-row .container-content-table-row-min-content,
+	.container-content-table-row .container-content-table-row-last,
+	.container-menu-item-text-content{
+		color: #333;
+	}
+
+	.container-content,
+	.container-content-horizontal-list-item-desc,	
+	.container-menu-item-text-header{
+		color: #666;
+	}
+
+	.container-content-horizontal-list-item{
+		color: #79A5A2;
+	}
+
+	.container-content-horizontal-list-item:hover,
+	.container-content-progress-bar-front-part{
+		color: #A4C4C3;
+	}
+
+	.container-content-bottom-steps-item-icon span{		
+		color: #558E88;	
+	}
+
+	.container-menu-item-text-content{
+		font-size: 15px;
+	}
+
+	.container-top-line-tab,
+	.container-content-plan-text-title{
+		font-size: 25px;
+	}		
+
+	.container-menu-item-icon span{
+		font-size: 35px;
+	}
+
+	.container-content-horizontal-list-item-icon span{
+		font-size: 40px;
+	}
+
+	.container-menu-item-icon,
+	.container-content-horizontal-list-item-desc,
+	.container-content-progress-bar-title, 
+	.container-content-progress-bar-percent,
+	.container-content-table-row-first,
+	.container-content-table-row-content,	
+	.container-content-table-row-min-content,
+	.container-content-table-row-last,
+	.container-content-dropdown-title,
+	.container-content-button,
+	.container-content-bottom-steps-item-icon,
+	.container-content-input{	
+		text-align: center;
+	}
+
+	.container-menu-item-text-header,
+	.container-content-plan-text-title,
+	.container-content-order-total-data-key,
+	.container-content-checkboxes-title,
+	.container-content-title,
+	.container-content-button{   
+		font-weight: bold;
+	}
+
+	.container-menu-item-text-header,
+	.container-content-plan-text-title,
+	.container-content-button{   
+		text-transform: uppercase;
+	}
+
+	.container-menu-item-text-header,
+	.container-content-table-row-first,
+	.container-content-table-row-content,	
+	.container-content-table-row-min-content,
+	.container-content-table-row-last{  
+		overflow: hidden;
+		text-overflow: ellipsis;		
+		white-space: nowrap;
+	}
+
+	.container-top-line,
+	.container-top-line-tabs,
+	.container-top-line-tab,
+	.container-center-line, 
+	.container-content,
+	.container-content-horizontal-list,
+	.container-content-horizontal-list-item-icon,
+	.container-content-progress-bar,
+	.container-content-grid-legend-item,
+	.container-content-grid-legend,
+	.container-content-order-total-data-item,
+	.container-content-grid-container,
+	.container-content-table-header,
+	.container-content-table-row,
+	.container-content-dropdown,
+	.container-content-bottom-steps,
+	.container-content-bottom-steps-item	{
+		display: flex;
+	}
+
+	.container, 
+	.container-menu,
+	.container-content,
+	.container-content-table-rows{	
+		display: flex;
+		flex-direction: column;
+	}
+
+	.container-top-line-tabs, 
+	.container-top-line-menu,
+	.container-menu-item,
+	.container-content-search-line,
+	.container-content-grid-legend-item,
+	.container-content-dropdown-title,
+	.container-content-bottom-steps-item-icon,
+	.container-content-bottom-steps-item-text,
+	.container-content-input{
+		align-items: center;
+		display: flex;
+	}
+
+	.container-top-line-menu{	
+		justify-content: flex-end;
+	}
+
+	.container-content-grid-container{
+		flex-wrap: wrap;	
+	}
+
+	.container-content-horizontal-list-item-icon,
+	.container-content-horizontal-list-item-icon span{
+		justify-content: center;
+	}
+
+	.container-content-bottom-steps{
+		justify-content: space-between;
+	}
+
+	.container-center-line{
+		flex-direction: row-reverse;
+	}
+
+	.container,
+	.container-top-line,
+	.container-top-line-tabs, 
+	.container-top-line-menu{
+		margin: 0;
+	}
+
+	.container-content-grid-item,
+	.container-content-grid-legend-item-color
+	{
+		margin: 5px;
+	}
+
+	.container-content-button{
+		margin: 20px 0;
+	}
+
+	.container-menu-item{
+		margin: 10px 20px;	
+	}
+
+	.container-menu-item-icon{			
+		margin: 0px 10px;
+	}
+
+	.container-content-horizontal-list-item{
+		margin: 10px 20px 20px 0;
+	}
+
+	.container-content-progress-bars, 
+	.container-content-progress-bar,
+	.container-content-progress-bars-title,
+	.container-content-grid-title,
+	.container-content-title{
+		margin-bottom: 10px;
+	}
+
+	.container-content-plan-text,
+	.container-content-search-line,
+	.container-content-grid-container,
+	.container-content-grid,
+	.container-content-table,
+	.container-content-order-total-data,
+	.container-content-checkboxes{
+		margin-bottom: 20px;
+	}
+
+	.container-top-line-tab-icon{
+		margin-right: 10px;
+	}
+
+	.container-top-line-tab,
+	.container-top-line-menu-lang,
+	.container-content-grid-legend-item,
+	.container-content-order-total-data-key{
+		margin-right: 20px;
+	}
+
+	.container-content-bottom-steps-item-text{
+		margin-top: 4px;
+	}
+	
+	.form-group{
+		margin-bottom: 0;
+	}
+
+	.container,
+	.container-top-line{
+		padding: 0;
+	}
+
+	.container-content-table-row-first,
+	.container-content-table-row-content,	
+	.container-content-table-row-min-content,
+	.container-content-table-row-last,
+	.container-content-dropdown-title,
+	.container-content-bottom-steps{
+		padding: 2px;
+	}
+
+	.container-menu-item-text,
+	.container-content-button{
+		padding: 5px;
+	}
+
+	.container-bottom-line,
+	.container-content-search-line-icon,
+	.container-content-dropdown-title{
+		padding: 10px;
+	}
+
+	.container-content{
+		padding: 20px;
+	}
+
+	.container-top-line-tab{
+		padding: 5px 10px;
+	}
+
+	.container-content-bottom-steps-item{
+		padding: 5px 15px;
+	}
+
+	.container-content-search-line-input input,
+	.container-content-progress-bar-title, 
+	.container-content-progress-bar-percent{
+		padding-top: 3px;
+	}
+
+	.container-content-horizontal-list-item-desc{
+		padding-top: 5px;
+	}
+
+	.container-top-line-tabs{
+		padding-left: 20px;
+	}
+
+	.container-top-line-menu{	
+		padding-right: 20px;
+	}
+
+	.container-content-table-row-content{
+		width: 70%;
+	}
+
+	.container-content-table-row-min-content{
+		width: 30%;
+	}
+
+	.container,
+	.container-top-line-tabs,
+	.container-menu-item-text,
+	.container-content,
+	.container-content-plan-text,
+	.container-content-search-line,
+	.container-content-search-line-input, 
+	.container-content-progress-line,
+	.container-content-search-line-input input,
+	.container-content-grid
+	.container-content-grid-legend,
+	.container-content-table,
+	.container-content-dropdown-select,
+	.container-content-dropdown-select select,
+	.container-content-progress-line,
+	.container-content-bottom-steps,
+	.container-content-input,
+	.container-content-content-input,
+	.container-content-content-input input,
+	.container-content-table-row-first select,
+	.container-content-table-row-content select,
+	.container-content-table-row-last input,
+	.container-content-table-rows{
+		width: 100%;
+	}
+
+	.container-menu-item-icon{	
+		width: 50px;
+	}
+
+	.container-content-progress-bar-title, 
+	.container-content-progress-bar-percent{
+		width: 100px;
+	}
+	
+	.container-content-order-total-data-key,
+	.container-content-dropdown-title{
+		width: 150px;
+	}
+	
+	.container-content-dropdown-title{
+		min-width: 150px;
+	}
+
+	.container-content-table-row-last,
+	.container-content-table-row-first{
+		min-width: 200px;
+	}
+
+	.container-top-line-menu,
+	.container-menu{	
+		min-width: 380px;
+	}
+
+	.container-content-horizontal-list-item-desc{
+		max-width: 150px;
+	}
+
+	.container-content-grid-item,
+	.container-content-grid-legend-item-color,
+	.container-content-bottom-steps-item-icon{
+		height: 30px;
+		min-width: 30px;		
+		width: 30px;
+	}
+			
+	.container{
+		height: 100vh;
+	}	
+
+	.container-center-line, 
+	.container-content, 
+	.container-menu,
+	.container-content-progress-bar-front-part{		
+		height: 100%;
+	}
+
+	.container-content-plan-text{
+		height: auto;
+	}
+
+	.container-content-search-line,
+	.container-content-search-line-input input,
+	.container-content-dropdown,
+	.container-content-table-row-first select,
+	.container-content-table-row-content select,
+	.container-content-table-row-min-content input,
+	.container-content-table-row-last input{
+		min-height: 40px;
+	}
+	
+	.container-content-dropdown,
+	.container-content-input,
+	.container-content-table-row,
+	.container-content-table-header
+	{
+		min-height: 50px;
+	}
+
+	.container-content-dropdown-title,
+	.container-content-dropdown-select,
+	.container-content-dropdown-select select{
+		height: 30px;
+	}
+
+	.container-menu-item{
+		min-height: 60px;		
+	}
+
+	.container-content-horizontal-list{
+		min-height: 100px;
+	}
+	
+	.container-content-table-rows{
+		height: auto;
+	}
+
+	.container-top-line-tabs,
+	.container-menu-item:hover,
+	.container-content-search-line-icon,
+	.container-content-dropdown-title,
+	.container-content-progress-bar-title, 
+	.container-content-progress-bar-percent{
+		background-color: #79A5A2;
+	}	
+
+	.container-top-line-menu{		
+		background-color: #558E88;
+	}
+
+	.container-top-line-tab:hover,
+	.container-menu-item,
+	.container-content-progress-bar-front-part,
+	.container-content-table-row-first,
+	.container-content-table-row-content,	
+	.container-content-table-row-min-content,
+	.container-content-table-row-last,
+	.container-content-table-row .container-content-table-row-last,
+	.container-content-button,
+	.container-content-bottom-steps-item:hover{
+		background-color: #A4C4C3;
+	}
+
+	.container-menu,
+	.container-bottom-line,
+	.container-content-progress-line,
+	.container-content-table-row .container-content-table-row-content,
+	.container-content-table-row .container-content-table-row-min-content,
+	.container-content-bottom-steps{
+		background-color: #E5E6FA;
+	}
+
+	.container-menu-item.container-menu-item-user,
+	.container-content-table-row .container-content-table-row-first{
+		background-color: #FFC107;
+	}
+
+	.container-content-table-row-first{
+		background-color: #F29B05;
+	}
+
+	.container-center-line, 
+	.container-content, 
+	.container-menu,
+	.container-content-bottom-steps{	
+		overflow-y: auto;
+	}
+
+	.container-content{		
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+
+	.container-content-horizontal-list{
+		overflow-x: auto;
+	}
+
+	.container-content-bottom-steps-item{
+		border-top: 5px solid #558E88;
+	}
+
+	.container-menu-item{
+		border-left: 8px solid #558E88;
+	}
+
+	.container-menu-item:hover{
+		border-left: 8px solid #666;
+	}
+
+	.container-menu-item.container-menu-item-user{
+		border-left: 8px solid #FB8C00;
+	}
+
+	.container-content-table-header,
+	.container-content-table-row{
+		border-bottom: 2px solid #fff;
+	}
+	.container-content-table-row-first,
+	.container-content-table-row-content,	
+	.container-content-table-row-min-content,
+	.container-content-table-row-last{
+		border-right: 3px solid #fff;
+	}
+
+	.container-content,
+	.container-content-progress-line{
+		position: relative;
+	}
+
+	.container-content-progress-bar-front-part,
+	.container-content-bottom-steps{
+		position: absolute;
+	}
+
+	.container-content-progress-bar-front-part{
+		left: 3px;
+		z-index: 5;
+	}
+
+	.container-content-bottom-steps{
+		bottom: 0;		
+		left: 0;
+	}
+
+	.container-content-bottom-steps-item-text{
+		white-space: nowrap;
+	}
+	
+	
+	body{
+		width: 100%;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+

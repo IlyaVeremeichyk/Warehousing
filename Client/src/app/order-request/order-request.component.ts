@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'order-request',
@@ -6,7 +6,16 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class OrderRequestComponent implements OnInit {
+
+    @ViewChild("products") productsComponent;
+    @ViewChild("transports") transportsComponent;
+
     constructor() { }
 
     ngOnInit() { }
+
+    submit(){
+        this.productsComponent.clean();
+        this.transportsComponent.clean();
+    }
 }

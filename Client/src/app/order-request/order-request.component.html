@@ -1,9 +1,9 @@
 <div class="container-content">
     <general-order-data></general-order-data>
 
-    <order-products></order-products>
+    <order-products #products></order-products>
    
-    <order-transport></order-transport>
+    <order-transport #transports></order-transport>
    
 
     <div class="container-content-order-total-data">
@@ -25,8 +25,8 @@
       </div>
     </div>
 
-    <div class="container-content-button" style="background-color: #FFC107;">
-      <a href="#"> Оформить заказ </a>
+    <div class="container-content-button" style="background-color: #FFC107;" (click)="submit()">
+      <a > Оформить заказ </a>
     </div>
 
   </div>

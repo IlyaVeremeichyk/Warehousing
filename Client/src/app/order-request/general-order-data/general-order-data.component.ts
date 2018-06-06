@@ -6,7 +6,14 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class GeneralOrderDataComponent implements OnInit {
-    constructor() { }
+    public customers: string[];
+    public selectedCustomer: string;
+    public orderDate: string = new Date().toString();
+
+    constructor() {
+        this.customers = ["ОАО БЗА", "ЗАО БелИнвест", "ООО ПромСтрой"];
+        this.selectedCustomer = "ОАО БЗА";
+    }
 
     ngOnInit() { }
 }

@@ -1,43 +1,53 @@
 <div class="container-content-plan-text">
-    <div class="container-content-plan-text-title">
-      <br/>Выберите транспорт для отгрузки </div>
-  </div>
+  <div class="container-content-plan-text-title">
+    <br/>Выберите транспорт для отгрузки </div>
+</div>
 
-  <div>
-    <div class="container-content-table-header">
-      <div class="container-content-table-row-first"> Категория транспорта </div>
-      <div class="container-content-table-row-content"> Наименование транспортного средства </div>
-      <div class="container-content-table-row-min-content"> Количество </div>
-      <div class="container-content-table-row-last"> Водитель </div>
-    </div>
-    <div class="container-content-table-rows">
-      <!-- Row is from here -->
-      <div class="container-content-table-row">
-        <div class="container-content-table-row-first">
-          <select>
-            <option> Категория 1 </option>
-            <option> Категория 2 </option>
-            <option> Категория 3 </option>
-          </select>
-        </div>
-        <div class="container-content-table-row-content">
-          <select>
-            <option> Наименование 1 </option>
-            <option> Наименование 2 </option>
-            <option> Наименование 3 </option>
-          </select>
-        </div>
-        <div class="container-content-table-row-min-content">
-          <input type="text" placeholder="0" />
-        </div>
-        <div class="container-content-table-row-last">
-          <input type="text" placeholder="Фамилия" />
-        </div>
+<div>
+  <div class="container-content-table-header">
+    <div class="container-content-table-row-first"> Категория транспорта </div>
+    <div class="container-content-table-row-content"> Наименование транспортного средства </div>
+    <div class="container-content-table-row-min-content"> Количество </div>
+    <div class="container-content-table-row-last"> Водитель </div>
+  </div>
+  <div class="container-content-table-rows">
+    <!-- Row is from here -->
+    <div class="container-content-table-row">
+      <div class="container-content-table-row-first">
+        <select [(ngModel)]="selectedCategory">
+          <option *ngFor="let category of categories">{{category}}</option>
+        </select>
       </div>
-      <!-- To here -->
+      <div class="container-content-table-row-content">
+        <select [(ngModel)]="selectedTransport">
+          <option *ngFor="let transport of transports[selectedCategory]">{{transport}}</option>
+        </select>
+      </div>
+      <div class="container-content-table-row-min-content">
+        <input type="text" placeholder="0" [(ngModel)]="selectedCount" />
+      </div>
+      <div class="container-content-table-row-last">
+        <input type="text" placeholder="Фамилия" [(ngModel)]="selectedDriver" />
+      </div>
+    </div>
+    <!-- To here -->
+    <div class="container-content-table-row" *ngFor="let transport of addedTransports">
+      <div class="container-content-table-row-first">
+        {{transport.category}}
+      </div>
+      <div class="container-content-table-row-content">
+        {{transport.transport}}
+      </div>
+      <div class="container-content-table-row-min-content">
+        {{transport.count}}
+      </div>
+      <div class="container-content-table-row-last">
+        {{transport.driver}}
+      </div>
     </div>
   </div>
+</div>
 
-  <div class="container-content-button">
-    <a href="#"> Добавить транспорт </a>
-  </div>
+<div class="container-content-button" (click)="addTransport()">
+  <a> Добавить транспорт </a>
+</div>

@@ -1,0 +1,32 @@
+<div class="container-content">
+    <general-order-data></general-order-data>
+
+    <order-products #products></order-products>
+   
+    <order-transport #transports></order-transport>
+   
+
+    <div class="container-content-order-total-data">
+      <div class="container-content-order-total-data-item">
+        <div class="container-content-order-total-data-key"> Покупатель: </div>
+        <div class="container-content-order-total-data-value"> ОАО "Х" </div>
+      </div>
+      <div class="container-content-order-total-data-item">
+        <div class="container-content-order-total-data-key"> Всего товаров: </div>
+        <div class="container-content-order-total-data-value"> 000 шт</div>
+      </div>
+      <div class="container-content-order-total-data-item">
+        <div class="container-content-order-total-data-key"> Общий вес: </div>
+        <div class="container-content-order-total-data-value"> 000 кг </div>
+      </div>
+      <div class="container-content-order-total-data-item">
+        <div class="container-content-order-total-data-key"> Общая стоимость: </div>
+        <div class="container-content-order-total-data-value"> 000 BYN </div>
+      </div>
+    </div>
+
+    <div class="container-content-button" style="background-color: #FFC107;" (click)="submit()">
+      <a > Оформить заказ </a>
+    </div>
+
+  </div>

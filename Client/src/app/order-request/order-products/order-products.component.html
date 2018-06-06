@@ -1,0 +1,54 @@
+<div class="container-content-plan-text">
+    <div class="container-content-plan-text-title">
+      <br/>Выберите товары для отгрузки </div>
+  </div>
+
+  <div>
+    <div class="container-content-table-header">
+      <div class="container-content-table-row-first"> Категория товара </div>
+      <div class="container-content-table-row-content"> Наименование товара </div>
+      <div class="container-content-table-row-min-content"> Количество </div>
+      <div class="container-content-table-row-last"> Оператор </div>
+    </div>
+    <div class="container-content-table-rows">
+      <!-- Row is from here -->
+      <div class="container-content-table-row">
+        <div class="container-content-table-row-first">
+          <select [(ngModel)]="selectedCategory">
+            <option *ngFor="let category of categories">{{category}}</option>
+          </select>
+        </div>
+        <div class="container-content-table-row-content">
+          <select [(ngModel)]="selectedProduct">
+            <option *ngFor="let product of products[selectedCategory]" >{{product}}</option>
+          </select>
+        </div>
+        <div class="container-content-table-row-min-content">
+          <input type="text" placeholder="0" [(ngModel)]="selectedCount"/>
+        </div>
+        <div class="container-content-table-row-last">
+          Веремейчик
+        </div>
+      </div>
+      <!-- To here -->
+      <div class="container-content-table-row" *ngFor="let product of addedProducts">
+          <div class="container-content-table-row-first">
+            {{product.category}}
+          </div>
+          <div class="container-content-table-row-content">
+              {{product.product}}
+          </div>
+          <div class="container-content-table-row-min-content">
+            {{product.count}}
+          </div>
+          <div class="container-content-table-row-last">
+            Веремейчик
+          </div>
+        </div>
+    </div>
+  </div>
+
+
+  <div class="container-content-button" (click)="addProduct()">
+    <a > Добавить товар </a>
+  </div>

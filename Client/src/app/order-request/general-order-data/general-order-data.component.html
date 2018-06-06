@@ -1,0 +1,28 @@
+<div class="container-content-plan-text">
+    <div class="container-content-plan-text-title"> Оформление заказа </div>
+    <div class="container-content-plan-text-content"> Введите общие данные о заказе: </div>
+</div>
+
+<div>
+    <div class="container-content-dropdown">
+        <div class="container-content-dropdown-title"> Покупатель </div>
+        <div class="container-content-dropdown-select">
+            <!-- Insert customers list here -->
+            <select [(ngModel)]="selectedCustomer">
+                <option *ngFor="let customer of customers">{{customer}}</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="container-content-input">
+        <div class="container-content-dropdown-title"> Дата </div>
+        <div class="container-content-content-input form-group">
+            <div class='input-group date' id='datetimepicker1'>
+                <ng-datepicker [(ngModel)]="orderDate" >
+                </ng-datepicker>
+            </div>
+        </div>
+    </div>
+</div>
